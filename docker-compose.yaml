@@ -1,0 +1,59 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ci3-app
+    ports:
+      - "8080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: ci3
+      DB_USERNAME: ci3
+      DB_PASSWORD: ci3
+    volumes:
+      - .:/var/www/html
+    networks:
+      - ci3-network
+
+  db:
+    image: mysql:5.7
+    platform: linux/amd64
+    container_name: ci3-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ci3
+      MYSQL_USER: ci3
+      MYSQL_PASSWORD: ci3
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-uroot",
+          "-proot"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ci3-network
+
+networks:
+  ci3-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
