@@ -1,44 +1,36 @@
 FROM php:5.6-apache
 
-# Install required PHP extensions
+ENV TZ=Asia/Jakarta
+ENV APACHE_DOCUMENT_ROOT=/var/www/html
+
+# PHP extensions
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-#timezone
-ENV TZ=Asia/Jakarta
-
-# Enable Apache rewrite
+# Apache rewrite
 RUN a2enmod rewrite
 
-# Set Apache document root
-ENV APACHE_DOCUMENT_ROOT /var/www/html
+# PHP timezone
+RUN echo "date.timezone=Asia/Jakarta" \
+    > /usr/local/etc/php/conf.d/timezone.ini
 
-# Update Apache configuration
+# Apache configuration
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
     /etc/apache2/sites-available/*.conf \
     /etc/apache2/apache2.conf \
     /etc/apache2/conf-available/*.conf
 
-#set timezone
-RUN echo "date.timezone=Asia/Jakarta" \
-    > /usr/local/etc/php/conf.d/timezone.ini
-    
-# Copy application
-COPY . /var/www/html
-
-RUN mkdir -p /tmp/ci3-sessions \
-    && chown -R www-data:www-data /tmp/ci3-sessions \
-    && chmod 700 /tmp/ci3-sessions
-
-# Allow .htaccess override
+# CI3 .htaccess
 RUN printf '<Directory /var/www/html>\n\
     AllowOverride All\n\
     Require all granted\n\
-</Directory>\n' > /etc/apache2/conf-available/codeigniter.conf \
+</Directory>\n' \
+    > /etc/apache2/conf-available/codeigniter.conf \
     && a2enconf codeigniter
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
+# CI3 session directory
+RUN mkdir -p /tmp/ci3-sessions \
+    && chown -R www-data:www-data /tmp/ci3-sessions \
+    && chmod 700 /tmp/ci3-sessions
 
 EXPOSE 80
 

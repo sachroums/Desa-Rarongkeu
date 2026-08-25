@@ -17,6 +17,7 @@ services:
       DB_PASSWORD: ci3
     volumes:
       - .:/var/www/html
+      - uploads_data:/var/www/html/assets/uploads
     networks:
       - ci3-network
 
@@ -58,3 +59,4 @@ networks:
 
 volumes:
   mysql_data:
+  uploads_data:
