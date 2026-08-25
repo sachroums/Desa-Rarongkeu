@@ -34,6 +34,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./db_desa.sql:/docker-entrypoint-initdb.d/db_desa.sql:ro
     healthcheck:
       test:
         [
