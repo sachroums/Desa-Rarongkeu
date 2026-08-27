@@ -103,12 +103,12 @@ class Admin extends CI_Controller {
     public function galeri()
     {
         $data['galeri'] = $this->db->get('galeri')->result();
-        $this->load->view('admin/v_galeri', $data);
+        $this->load->view('Admin/v_galeri', $data);
     }
 
     public function tambah_galeri()
     {
-        $this->load->view('admin/v_tambah_galeri');
+        $this->load->view('Admin/v_tambah_galeri');
     }
 
     public function proses_tambah_galeri()
@@ -138,7 +138,7 @@ class Admin extends CI_Controller {
     public function edit_galeri($id)
     {
         $data['galeri'] = $this->db->get_where('galeri', ['id_galeri' => $id])->row();
-        $this->load->view('admin/v_edit_galeri', $data);
+        $this->load->view('Admin/v_edit_galeri', $data);
     }
 
     public function update_galeri($id)
@@ -186,7 +186,7 @@ class Admin extends CI_Controller {
     public function perangkat()
     {
         $data['perangkat'] = $this->db->get('perangkat_desa')->result();
-        $this->load->view('admin/v_perangkat', $data);
+        $this->load->view('Admin/v_perangkat', $data);
     }
 
     public function tambah_perangkat()
@@ -269,7 +269,7 @@ class Admin extends CI_Controller {
     {
         $this->load->model('Model_potensi');
         $data['potensi'] = $this->Model_potensi->get_data()->result();
-        $this->load->view('admin/v_admin_potensi', $data);
+        $this->load->view('Admin/v_admin_potensi', $data);
     }
 
     public function proses_tambah_potensi()
@@ -300,7 +300,7 @@ class Admin extends CI_Controller {
 
     public function tambah_potensi()
     {
-        $this->load->view('admin/v_tambah_potensi');
+        $this->load->view('Admin/v_tambah_potensi');
     }
 
     public function edit_potensi($id)
@@ -310,7 +310,7 @@ class Admin extends CI_Controller {
         // Menggunakan query builder langsung untuk mengambil baris data tunggal berdasarkan ID
         $data['potensi'] = $this->db->get_where('potensi', $where)->row();
         
-        $this->load->view('admin/v_edit_potensi', $data);
+        $this->load->view('Admin/v_edit_potensi', $data);
     }
 
 public function update_potensi($id)
